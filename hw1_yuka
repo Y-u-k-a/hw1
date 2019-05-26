@@ -1,0 +1,16 @@
+with open("dictionary.words2.txt") as file: #scoreの大きい順に並べた辞書
+    line = file.readlines()
+    cnt = 1
+    import re
+    
+    words = "vgjtvqujgwdbgoarf" #ここに与えられた16字を入力
+    words = sorted(words)
+    words = "".join(words)
+    words += "\n"
+    
+    for i in line[1::2]:
+        match = re.search(i, words)
+        if match != None:
+            print(line[cnt-1])
+            
+        cnt+=2
