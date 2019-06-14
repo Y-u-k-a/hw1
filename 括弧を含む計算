@@ -98,7 +98,7 @@ def separate(line):#括弧の中から計算
     formula = line
     while formula.find("(") != -1:
         hajime = formula.rfind("(")
-        owari = formula.rfind(")")
+        owari = formula.find(")")
         
         if hajime<owari:
             print("()より前の数式: "+str(formula[:hajime]))
