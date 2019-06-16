@@ -1,0 +1,70 @@
+import csv
+
+def searchNumber(nickname):#ユーザーのニックネームをもとにidを見つける関数
+    with open("/Users/harano/Desktop/nicknames.tsv") as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            if nickname == row[1]:
+                return row[0]
+    return "No such nickname"
+
+#searchNumber用のテスト
+#start_nickname = "jacob"
+#start_number = searchNumber(start_nickname)
+#print(start_number)
+
+
+def operator(num):#searchFollowingで発見されたidが既に調べられてるものか判定する関数
+    for i in stock:
+        if num == i:
+            return "exist"#既に調べられているなら"exist"と返す     
+    stock.append(num)
+    return "new"#初めて調べるアカウントなら"new"と返す
+start_nickname = "jacob"
+start_number =searchNumber(start_nickname)
+stock = ['5']
+
+#operator用のテスト
+#print(operator(start_number))
+#print(stock)
+
+
+def searchFollowing(num):#numをidとするユーザーがフォローしているidを見つける関数
+    with open("/Users/harano/Desktop/links.txt") as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            if num == row[0] and operator(row[1]) == "new":
+                return row[1]
+        num_stock = stock.index(num)
+        if num_stock != 0:
+            return stock[num_stock-1]#もし行き止まりだったら一つ前のidに戻る
+    return "STOP"
+
+#searchFollowing用のテスト
+#start_nickname = "jacob"
+#start_number = searchNumber(start_nickname)
+#stock = ['23']#次にfollowする予定のアカウントがstockに一つもない時
+#stock = ['23','9']#次にfollowする予定のアカウントがstockに一つあった時
+#stock= ['5','23','9','21','24']#次にfollowする予定のアカウントがstockに全てあった時
+#print(searchFollowing(start_number))
+
+
+def test(num):#最終的にfollowしたいアカウントにたどり着くまでsearchFollowingを続ける
+    cnt = 1
+    while num != end_number:
+        if num == "STOP":
+            return "辿り着けません"
+        num = searchFollowing(num)
+        cnt += 1
+    sentence = "このプログラムでは"+start_nickname+"さんから"+end_nickname+"さんまで"+str(cnt)+"回の試行で辿り着けます"
+    return sentence
+
+
+start_nickname = "jacob"#しまさんのニックネーム
+start_number = searchNumber(start_nickname)#しまさんのidを見つける
+end_nickname = "dwight"#私のニックネーム
+end_number= searchNumber(end_nickname)#私のidを見つける
+stock = [start_number]#重複しないためのstock
+
+
+test(start_number)
