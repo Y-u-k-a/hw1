@@ -1,0 +1,53 @@
+import csv
+
+def search_id(user_nickname):#ニックネームからIDを見つける関数
+    with open("/Users/harano/Desktop/nicknames.tsv") as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            if user_nickname == row[1]:
+                return row[0]
+    return "No such nickname"
+    
+    
+def get_following(user_id):#IDを受け取って、そのIDがフォローしているIDのリストを返す
+    following_list = []
+    with open("/Users/harano/Desktop/links.txt") as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            if user_id == row[0] and hasVisited(row[1]) == 'no':
+                following_list.append(row[1])
+    return following_list
+    
+
+def find_steps(src_id, dest_id):#始点と終点のIDを受け取って、幅優先探索を行う
+    queue = []
+    steps = {}
+    queue.append(src_id)
+    steps[src_id] =0
+    while len(queue)>0:
+        current_id = queue.pop(0)
+        for neighbor_id in get_following(current_id):
+            steps[neighbor_id] = steps[current_id]+1
+            queue.append(neighbor_id)
+        if current_id == dest_id:
+            return steps[current_id]
+    return -1
+    
+
+def hasVisited(user_id):#既に探索しているかどうか判定する
+    for searched_id in stack:
+        if user_id == searched_id:
+            return 'yes'
+    stack.append(user_id)
+    return 'no'
+    
+    
+scr_nickname = "jacob"#しまさんのニックネーム
+dest_nickname = "dwight"#私のニックネーム
+
+scr_id = search_id(scr_nickname)#しまさんのID
+dest_id = search_id(dest_nickname)#私のID
+stack = [scr_id]
+
+print(find_steps(scr_id, dest_id))
+        
