@@ -1,7 +1,7 @@
 import csv
 
 def search_id(user_nickname):#ニックネームからIDを見つける関数
-    with open("/Users/harano/Desktop/nicknames.tsv") as file:
+    with open("nicknames.txt") as file:
         reader = csv.reader(file, delimiter='\t')
         for row in reader:
             if user_nickname == row[1]:
@@ -11,7 +11,7 @@ def search_id(user_nickname):#ニックネームからIDを見つける関数
     
 def get_following(user_id):#IDを受け取って、そのIDがフォローしているIDのリストを返す
     following_list = []
-    with open("/Users/harano/Desktop/links.txt") as file:
+    with open("links.txt") as file:
         reader = csv.reader(file, delimiter='\t')
         for row in reader:
             if user_id == row[0] and hasVisited(row[1]) == 'no':
